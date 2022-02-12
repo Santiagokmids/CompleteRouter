@@ -87,3 +87,22 @@ let About = {
 }
 
 export default About;
+
+content.innerHTML = await page.render();
+await page.after_render();
+
+let Bottombar = {
+    render: async () => {
+        let view = /*html*/`
+        <footer class = "footer">
+            <div class = "conter has-text-centered">
+                <p>
+                    This is my foot. There are many like it, but this one is mine.
+                </p>
+            </div>
+        </footer>
+        `
+        return view
+    },
+    after_render: async () => { }
+}
