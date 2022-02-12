@@ -106,3 +106,16 @@ let Bottombar = {
     },
     after_render: async () => { }
 }
+
+export default Bottombar;
+
+const router = async () => {
+    const header = null || document.getElementById('header_container');
+    const content = null || document.getElementById('page_container');
+    const footer = null || document.getElementById('footer_container');
+    
+    header.innerHTML = await Navbar.render();
+    await Navbar.after_render();
+    footer.innerHTML = await Bottombar.render();
+    await Bottombar.after_render();
+}
