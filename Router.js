@@ -35,3 +35,24 @@ parseRequestURL: () => {
 
     return request
 }
+
+const routes = {
+    '/'             : Home
+    , '/about'      : About
+    , '/p/:id'      : PostShow
+    , '/register'   : Register
+};
+
+content.innerHTML = await page.render();
+
+let About = {
+    render : async () => {
+        let view = /*html*/`
+            <section class = "section">
+                <h1> About </h1>
+            </section>
+        `
+
+        return view
+    }
+}
