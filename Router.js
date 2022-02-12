@@ -56,3 +56,13 @@ let About = {
         return view
     }
 }
+
+export default About;
+
+let About = /*html*/`
+        <section class = "section">
+          <h1> About </h1>
+        </section>  
+        `
+
+export default About;
