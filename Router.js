@@ -1,3 +1,26 @@
+var regis = Boolean(false);
+
+let Home = {
+    render : async () => {
+        let posts = await getPostsList()
+        let view =  /*html*/`
+            <section class="section">
+                <h1> Home </h1>
+                <ul>
+                    ${ posts.map(post => 
+                        /*html*/`<li><a href="#/p/${post.id}">${post.title}</a></li>`
+                        ).join('\n ')
+                    }
+                </ul>
+            </section>
+        `
+        return view
+    }
+    , after_render: async () => {
+    }
+ 
+ }
+
 const router = async () => {
 
     const header = null || document.getElementById('header_container');
@@ -9,15 +32,13 @@ const router = async () => {
     footer.innerHTML = await Bottombar.render();
     await Bottombar.after_render();
 
-
     let request = Utils.parseRequestURL()
 
     let parsedURL = (request.resource ? '/' + request.resource : '/') + (request.id ? '/:id' : '') + (request.verb ? '/' + request.verb : '')
-    
-    let page = router[parsedURL] ? routes[parsedURL] : Error404
+
+    let page = routes[parsedURL] ? routes[parsedURL] : Error404
     content.innerHTML = await page.render();
     await page.after_render();
-  
 }
 
 window.addEventListener('hashchange', router);
@@ -51,7 +72,7 @@ let Bottombar = {
         <footer class="footer">
             <div class="content has-text-centered">
                 <p>
-                    This is my foot. There are many like it, but this one is mine.
+                    Este es el pie de página. There are many like it, but this one is mine.
                 </p>
             </div>
         </footer>
@@ -65,48 +86,50 @@ let Bottombar = {
 let Navbar = {
     render: async () => {
         let view =  /*html*/`
-             <nav class="navbar" role="navigation" aria-label="main navigation">
-                <div class="container">
-                    <div class="navbar-brand">
-                        <a class="navbar-item" href="/#/">
-                        </a>
-                        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                            <span aria-hidden="true"></span>
-                            <span aria-hidden="true"></span>
-                            <span aria-hidden="true"></span>
-                        </a>
-                    </div>
-                    <div id="navbarBasicExample" class="navbar-menu is-active" aria-expanded="false">
-                        <div class="navbar-start">
-                            <a class="navbar-item" href="/#/">
-                                Home
-                            </a>
-                            <a class="navbar-item" href="/#/about">
-                                About
-                            </a>
-                            <a class="navbar-item" href="/#/secret">
-                                Secret
-                            </a>
-                        </div>
-                        <div class="navbar-end">
-                            <div class="navbar-item">
-                                <div class="buttons">
-                                    <a class="button is-primary" href="/#/register">
-                                        <strong>Sign up</strong>
-                                    </a>
-                                    <a class="button is-light">
-                                        Log in
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </nav>
+        <div id="header_container">
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+           <div class="container">
+               <div class="navbar-brand">
+                   <a class="navbar-item" href="Index.html#/">
+                       <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+                   </a>
+
+                   <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                       <span aria-hidden="true"></span>
+                       <span aria-hidden="true"></span>
+                       <span aria-hidden="true"></span>
+                   </a>
+               </div>
+
+               <div id="navbarBasicExample" class="navbar-menu is-active" aria-expanded="false">
+                   <div class="navbar-start">
+                       <a class="navbar-item" href="Index.html#/">
+                           Home
+                       </a>
+                       <a class="navbar-item" href="Index.html#/about">
+                           About
+                       </a>
+                       <a class="navbar-item" href="Index.html#/secret">
+                           Secret
+                       </a>
+                   </div>
+                   <div class="navbar-end">
+                       <div class="navbar-item">
+                           <div class="buttons">
+                               <a class="button is-primary" href="Index.html#/register">
+                                   <strong>Log In</strong>
+                               </a>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </nav>
+   </div>
         `
         return view
-    },
-    after_render: async () => { }
+    },after_render: async () => { 
+    }
 
 }
 
@@ -154,27 +177,6 @@ let getPostsList = async () => {
    }
 }
 
-let Home = {
-   render : async () => {
-       let posts = await getPostsList()
-       let view =  /*html*/`
-           <section class="section">
-               <h1> Home </h1>
-               <ul>
-                   ${ posts.map(post => 
-                       /*html*/`<li><a href="#/p/${post.id}">${post.title}</a></li>`
-                       ).join('\n ')
-                   }
-               </ul>
-           </section>
-       `
-       return view
-   }
-   , after_render: async () => {
-   }
-
-}
-
 let getPost = async (id) => {
     const options = {
        method: 'GET',
@@ -195,17 +197,31 @@ let getPost = async (id) => {
 let PostShow = {
 
     render : async () => {
-        let request = Utils.parseRequestURL()
-        let post = await getPost(request.id)
+
+        if(regis){
+            let request = Utils.parseRequestURL()
+            let post = await getPost(request.id)
+            
+            return /*html*/`
+                <section class="section">
+                    <h1> Post Id : ${post.id}</h1>
+                    <p> Post Title : ${post.title} </p>
+                    <p> Post Content : ${post.content} </p>
+                    <p> Post Author : ${post.name} </p>
+                    <br>
+                    <button class = "button is-primary" id="change_submit_btn">
+                        Modify
+                    </button>
+                </section>
+            `
+        }else{
+            alert(`You need sign up to enter`);
+            window.history.back;
+            return /*html*/`
+                <h1>Loading. . . </h1>
+             `
+        }
         
-        return /*html*/`
-            <section class="section">
-                <h1> Post Id : ${post.id}</h1>
-                <p> Post Title : ${post.title} </p>
-                <p> Post Content : ${post.content} </p>
-                <p> Post Author : ${post.name} </p>
-            </section>
-        `
     }
     , after_render: async () => {
     }
@@ -214,6 +230,7 @@ let PostShow = {
 let Register = {
 
     render: async () => {
+        
         return /*html*/ `
             <section class="section">
                 <div class="field">
@@ -264,8 +281,16 @@ let Register = {
                 alert (`The fields cannot be empty`)
             } 
             else {
+                regis = true;
                 alert(`User with email ${email.value} was successfully submitted!`)
             }    
         })
     }
 }
+ 
+const routes = {
+    '/'             : Home
+    , '/about'      : About
+    , '/p/:id'      : PostShow
+    , '/register'   : Register
+};
